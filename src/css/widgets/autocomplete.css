@@ -1,0 +1,14 @@
+.dollar-widget-autocomplete {
+	background: white;
+	border: 1px silver solid;
+	font-family: sans-serif;
+	font-size: small;
+	z-index: 1;
+}
+.dollar-widget-autocomplete>div.widget-autocomplete-result {
+	padding: 0.5em 1em;
+}
+.dollar-widget-autocomplete>div.widget-autocomplete-result:hover, .dollar-widget-autocomplete>div.widget-autocomplete-result-focus {
+	background: yellow;
+	cursor: pointer;
+}

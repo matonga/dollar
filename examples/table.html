@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link type="text/css" href="../release/dollar.min.css" rel="stylesheet">
+<script type="text/javascript" src="../release/dollar.min.js"></script>
+<script type="text/javascript">
+$(document).ready (function () {
+	var people = [ ];
+	var names = [ 'Ana', 'Elizabeth', 'Walter', 'Sebastian', 'Alex', 'Peter', 'Adam', 'Bart' ];
+	var surnames = [ 'McQueen', 'Peterson', 'Smith', 'Brown', 'White', 'Simpson', 'Savage', 'Roberts' ];
+	var lowest_birthday = new Date ('1950-01-01T00:00:00.000Z').getTime ();
+	for (var i=0; i<names.length; i++) {
+		for (var j=0; j<surnames.length; j++) {
+			var birthday = 
+			people.push ({ name: names[i], surname: surnames[j], birthday: lowest_birthday + Math.random () * 50 * 365 * 86400 * 1000 });
+		}
+	}
+	people.sort (function () { return 0.5 - Math.random(); });	// shuffle the people
+	$(document.body).append ($.table ([
+		{ name: 'name', caption: 'Name', sortable: true },
+		{ name: 'surname', caption: 'Surname', sortable: true },
+		{ name: 'birthday', caption: 'Birthday', sortable: true, align: 'right', format: function (birthday) {
+			birthday = new Date (birthday).toISOString().substr (0, 10).split ('-');
+			return [ birthday[1]*1, birthday[2]*1, birthday[0]*1 ].join ('/');
+		} }
+	], people));
+});
+</script>
+</head>
+<body>
+</body>
+</html>

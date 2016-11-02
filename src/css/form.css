@@ -1,0 +1,15 @@
+.dollar-form-inline {
+	clear: none;
+	width: auto;
+	margin-left: 1em;
+}
+.dollar-form-error {
+	background-color: #fcc;
+	color: #c00;
+	padding: 1em;
+	display: none;
+}
+.dollar-form-error-visible {
+	display: table;
+	margin-top: 0.5em;
+}

@@ -1,0 +1,67 @@
+.dollar-widget-date {
+	background: white;
+	border: 1px silver solid;
+	font-family: sans-serif;
+	font-size: small;
+}
+.dollar-widget-date-year {
+	font-weight: bold;
+	text-align: center;
+	padding: 0.5em 0;
+	border-bottom: 1px #eee solid;
+	height: 2em;
+	line-height: 2em;
+}
+.dollar-widget-date-month {
+	font-weight: bold;
+	text-align: center;
+	padding: 0.5em 0;
+	border-bottom: 1px #eee solid;
+	height: 2em;
+	line-height: 2em;
+}
+.dollar-widget-date-header {
+	border-bottom: 1px #eee solid;
+}
+.dollar-widget-date-header>div {
+	width: 2em;
+	font-weight: bold;
+	display: inline-block;
+	text-align: center;
+	padding: 0.5em 0.5em;
+}
+.dollar-widget-date-week {
+}
+.dollar-widget-date-week>div {
+	width: 2em;
+	display: inline-block;
+	text-align: right;
+	padding: 0.5em 0.5em;
+}
+.dollar-widget-date-week>div.dollar-widget-date-selectable.dollar-widget-date-today {
+	background: silver;
+	color: white;
+	font-weight: bold;
+	border-radius: 2px;
+}
+.dollar-widget-date-week>div.dollar-widget-date-selectable:hover {
+	background: yellow;
+	cursor: pointer;
+	color: black;
+}
+.dollar-widget-date-week>div.dollar-widget-date-selected {
+	background: blue;
+	color: white;
+}
+.dollar-widget-date-prev, .dollar-widget-date-next {
+	font-family: sans-serif;
+	font-size: small;
+	height: 2em;
+	line-height: 1em;
+}
+.dollar-widget-date-prev {
+	float: left;
+}
+.dollar-widget-date-next {
+	float: right;
+}

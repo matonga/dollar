@@ -1,0 +1,72 @@
+.dollar-table {
+	border: 1px silver solid;
+	border-collapse: collapse;
+	font-family: sans-serif;
+	font-size: small;
+}
+.dollar-table>thead>tr>th, .dollar-table>tfoot>tr>th, .dollar-table>tbody>tr>td {
+	border-left: 1px silver solid;
+	padding: .5em 1em;
+}
+.dollar-table>thead>tr>th {
+	border-bottom: 1px silver solid;
+}
+.dollar-table>tfoot>tr>th {
+	border-top: 1px silver solid;
+}
+.dollar-table>tbody>tr>td {
+	white-space: pre;
+}
+.dollar-table>tbody>tr:hover>td {
+	background-color: yellow;
+}
+.dollar-table>thead>tr>th>.dollar-table-sortable {
+	float: right;
+	width: 0;
+	overflow: hidden;
+	transition: width .2s, padding .2s;
+}
+.dollar-table>thead>tr>th:hover>.dollar-table-sortable {
+	display: inline-block;
+	padding: 0 .5em;
+	cursor: pointer;
+	width: 1em;
+}
+.dollar-table-menu {
+	display: inline-block;
+	border: 1px silver solid;
+	padding: 15px 25px 5px 5px;
+	box-shadow: 1px 1px 5px gray;
+	background: white;
+}
+.dollar-table-menu>div>label {
+	display: inline-block;
+	padding: 5px;
+}
+.dollar-table-menu-close {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 10px;
+}
+.dollar-table>tbody>tr.dollar-table-collapsible {
+	transition: line-height .2s, opacity .2s;
+}
+.dollar-table>tbody>tr.dollar-table-collapsible.dollar-table-collapsed {
+	line-height: 0;
+	opacity: 0;
+}
+.dollar-table>tbody>tr.dollar-table-collapsible>td {
+	transition: padding .2s;
+}
+.dollar-table>tbody>tr.dollar-table-collapsible.dollar-table-collapsed>td {
+	padding: 0 1em;
+}
+.dollar-table-toggle {
+	cursor: pointer;
+	padding: 1px 4px;
+	width: .5em;
+	text-align: center;
+	display: inline-block;
+	border: 1px silver solid;
+}
