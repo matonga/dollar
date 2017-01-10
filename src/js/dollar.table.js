@@ -256,7 +256,7 @@
 			column_iterator_tr.append (td);
 			var text;
 			try {
-				if (column.name && $.defined (column_iterator_row[column.name])) {
+				if (column.name/* && $.defined (column_iterator_row[column.name])*/) {
 					text = column.format ? column.format (column_iterator_row[column.name]) : column_iterator_row[column.name];
 				} else if (column.format) {
 					text = column.format (column_iterator_row);
