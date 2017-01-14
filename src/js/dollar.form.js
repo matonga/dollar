@@ -89,7 +89,11 @@
 				if (field.label_class) {
 					label.attr ('class', field.label_class);
 				}
-				label.text (' ' + field.label);
+				if (field.label.native) {
+					label.append (field.label);
+				} else {
+					label.text (' ' + field.label);
+				}
 				label.prepend (input);
 				dd.append (label);
 			} else {
