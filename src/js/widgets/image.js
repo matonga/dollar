@@ -17,7 +17,9 @@
 		div.css ('background', 'linear-gradient(bottom,#ddd,#eee)');
 		div.css ('float', 'left');
 		div.css ('clear', 'left');
+		div.css ('display', 'inline-block');
 		search.next (div);
+		div.next ($('<div>').css ('clear', 'both'));
 		var img = false;
 		var ratio, x, y;
 		var getDataURL = false;
