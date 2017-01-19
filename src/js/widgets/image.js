@@ -72,13 +72,13 @@
 				img.css ('top', y + 'px');
 				div.append (img);
 				var mx, my, mb = false;
-				img.event ('mousedown', function (e) {
+				function mouse_down (e) {
 					e.preventDefault ();
 					mb = true;
 					mx = e.pageX;
 					my = e.pageY;
-				});
-				img.event ('mousemove', function (e) {
+				}
+				function mouse_move (e) {
 					if (mb) {
 						x += e.pageX - mx;
 						y += e.pageY - my;
@@ -97,12 +97,34 @@
 						img.css ('left', x + 'px');
 						img.css ('top', y + 'px');
 					}
-				});
-				img.event ('mouseup', function (e) {
+				}
+				function mouse_up (e) {
 					mb = false;
 					getDataURL (function (url) {
 						input.val (url);
 					});
+				}
+				img.event ('mousedown', mouse_down);
+				img.event ('mousemove', mouse_move);
+				img.event ('mouseup', mouse_up);
+				img.event ('touchstart', function (e) {
+					if (e.touches.length == 1) {
+						e.pageX = e.touches[0].pageX;
+						e.pageY = e.touches[0].pageY;
+						mouse_down (e);
+					}
+				});
+				img.event ('touchmove', function (e) {
+					if (e.touches.length == 1) {
+						e.pageX = e.touches[0].pageX;
+						e.pageY = e.touches[0].pageY;
+						mouse_move (e);
+					}
+				});
+				img.event ('touchend', function (e) {
+					if (!e.touches.length) {
+						mouse_up (e);
+					}
 				});
 				getDataURL (function (url) {
 					input.val (url);
