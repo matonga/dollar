@@ -407,5 +407,12 @@
 		return functionWithFilter;
 	};
 	$.widgets = {};
+	$.spread = function (original) {
+		if (original instanceof Array) {
+			return original.concat (Array.from (arguments).slice (1));
+		} else {
+			return Object.assign.apply (Object, [ { } ].concat (Array.from (arguments)));
+		}
+	};
 	scope.$ = $;
 }) (window);
