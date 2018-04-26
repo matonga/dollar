@@ -39,7 +39,7 @@
 		}
 		return element.jsDollar;
 	}
-	var simple_regexp = new RegExp ('^<([a-z]+)/>$');
+	var simple_regexp = new RegExp ('^<([a-z]+)/?>$');
 	var $ = function (text) {
 		if (!text) {
 			return null;
@@ -164,12 +164,23 @@
 			return this.native.checked;
 		}
 	});
+	function apply_object (instance, method, object) {
+		for (var name in object) {
+			var value = object[name];
+			instance[method] (name, value);
+		}
+	}
 	$.extend ('attr', function (name, value) {
+		if (typeof (name) == 'object') {
+			var object = name;
+			apply_object (this, 'attr', object);
+			return this;
+		}
 		if ($.defined (value)) {
-			if (value === null) {
-				this.native.removeAttribute (name);
-			} else {
+			if (value !== null) {
 				this.native.setAttribute (name, value);
+			} else {
+				this.native.removeAttribute (name);
 			}
 			return this;
 		} else {
@@ -180,6 +191,11 @@
 		}
 	});
 	$.extend ('css', function (name, value) {
+		if (typeof (name) == 'object') {
+			var object = name;
+			apply_object (this, 'css', object);
+			return this;
+		}
 		var cssName = name.replace (new RegExp ('-[a-z]','g'), function (text) { return text.substr (1, 1).toUpperCase (); });
 		if ($.defined (value)) {
 			if (!value) {
@@ -261,7 +277,11 @@
 			}
 			return this;
 		} else {
-			return $(this.native.previousSibling);
+			if (this.native.previousSibling) {
+				return $(this.native.previousSibling);
+			} else {
+				return false;
+			}
 		}
 	});
 	$.extend ('next', function (sibling) {
@@ -283,7 +303,11 @@
 			}
 			return this;
 		} else {
-			return $(this.native.nextSibling);
+			if (this.native.nextSibling) {
+				return $(this.native.nextSibling);
+			} else {
+				return false;
+			}
 		}
 	});
 	$.extend ('addClass', function (className) {
@@ -340,13 +364,16 @@
 	});
 	$.extend ('children', function (index) {
 		if ($.defined (index)) {
+			if (typeof(index)=="string" && index.substr(0,1) == ".") {
+				return $(this.native.getElementsByClassName(index.substr(1)));
+			} else
 			if (this.native.children[index]) {
 				return $(this.native.children[index]);
 			} else {
 				return null;
 			}
 		} else {
-			return $(this.native.children);
+			return new array_instance(this.native.children);
 		}
 	});
 	$.extend ('focus', function () {
@@ -362,6 +389,13 @@
 			}
 		}
 		return null;
+	});
+	$.extend ('clone', function () {
+		var copy = $(this.native.cloneNode(true));
+		if (copy.attr ('id')) {
+			copy.native.removeAttribute ('id');
+		}
+		return copy;
 	});
 	$.array = function (elements) {
 		if (!$.defined (elements)) {
