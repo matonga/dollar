@@ -149,7 +149,7 @@
 		$(window).event ('load', ready_handler);
 	});
 	$.extend ('val', function (value) {
-		if ($.defined (value)) {
+		if (arguments.length) {
 			this.native.value = value;
 			return this;
 		} else {
@@ -157,7 +157,7 @@
 		}
 	});
 	$.extend ('checked', function (value) {
-		if ($.defined (value)) {
+		if (arguments.length) {
 			this.native.checked = value;
 			return this;
 		} else {
@@ -176,7 +176,7 @@
 			apply_object (this, 'attr', object);
 			return this;
 		}
-		if ($.defined (value)) {
+		if (arguments.length > 1) {
 			if (value !== null) {
 				this.native.setAttribute (name, value);
 			} else {
@@ -184,9 +184,6 @@
 			}
 			return this;
 		} else {
-			if (!this.native.hasAttribute) {
-				console.log ('Will fail: ' , this.native);
-			}
 			return this.native.hasAttribute (name) ? this.native.getAttribute (name) : null;
 		}
 	});
@@ -197,7 +194,7 @@
 			return this;
 		}
 		var cssName = name.replace (new RegExp ('-[a-z]','g'), function (text) { return text.substr (1, 1).toUpperCase (); });
-		if ($.defined (value)) {
+		if (arguments.length > 1) {
 			if (!value) {
 				if (this.native.style.removeProperty) {
 					this.native.style.removeProperty (cssName);
@@ -214,9 +211,11 @@
 	});
 	$.extend ('show', function () {
 		this.css ('display', 'block');
+		return this;
 	});
 	$.extend ('hide', function () {
 		this.css ('display', 'none');
+		return this;
 	});
 	$.extend ('toggle', function () {
 		if (this.css ('display') == 'none') {
@@ -224,6 +223,7 @@
 		} else {
 			this.hide ();
 		}
+		return this;
 	});
 	$.extend ('append', function (child) {
 		if (typeof (child) == "string") {
@@ -263,7 +263,7 @@
 		return this;
 	});
 	$.extend ('prev', function (sibling) {
-		if ($.defined (sibling)) {
+		if (arguments.length) {
 			if (typeof (sibling) == "string") {
 				sibling = {
 					native: document.createTextNode (sibling)
@@ -285,7 +285,7 @@
 		}
 	});
 	$.extend ('next', function (sibling) {
-		if ($.defined (sibling)) {
+		if (arguments.length) {
 			if (typeof (sibling) == "string") {
 				sibling = {
 					native: document.createTextNode (sibling)
@@ -310,49 +310,73 @@
 			}
 		}
 	});
-	$.extend ('addClass', function (className) {
-		var classes = this.attr ('class');
-		classes = classes ? classes.split (' '): [];
-		if (classes.indexOf (className) < 0) {
-			classes.push (className);
+	if (document.head.classList) {
+		$.extend ('addClass', function (className) {
+			this.native.classList.add (className);
+			return this;
+		});
+		$.extend ('removeClass', function (className) {
+			this.native.classList.remove (className);
+			return this;
+		});
+		$.extend ('hasClass', function (className) {
+			return this.native.classList.contains (className);
+		});
+		$.extend ('toggleClass', function (className) {
+			return this.native.classList.toggle (className);
+		});
+	} else {
+		$.extend ('addClass', function (className) {
+			var classes = this.attr ('class');
+			classes = classes ? classes.split (' '): [];
+			if (classes.indexOf (className) < 0) {
+				classes.push (className);
+				this.attr ('class', classes.join (' '));
+			}
+			return this;
+		});
+		$.extend ('removeClass', function (className) {
+			var classes = [];
+			var existingClasses = this.attr ('class');
+			existingClasses = existingClasses ? existingClasses.split (' '): [];
+			existingClasses.forEach (function (someClass) {
+				if (someClass != className) {
+					classes.push (someClass);
+				}
+			});
 			this.attr ('class', classes.join (' '));
-		}
-		return this;
-	});
-	$.extend ('removeClass', function (className) {
-		var classes = [];
-		var existingClasses = this.attr ('class');
-		existingClasses = existingClasses ? existingClasses.split (' '): [];
-		existingClasses.forEach (function (someClass) {
-			if (someClass != className) {
-				classes.push (someClass);
+			return this;
+		});
+		$.extend ('hasClass', function (className) {
+			var existingClasses = this.attr ('class');
+			existingClasses = existingClasses ? existingClasses.split (' '): [];
+			return existingClasses.indexOf (className) >= 0;
+		});
+		$.extend ('toggleClass', function (className) {
+			if (this.hasClass (className)) {
+				this.removeClass (className);
+			} else {
+				this.addClass (className);
 			}
 		});
-		this.attr ('class', classes.join (' '));
-		return this;
-	});
-	$.extend ('hasClass', function (className) {
-		var existingClasses = this.attr ('class');
-		existingClasses = existingClasses ? existingClasses.split (' '): [];
-		return existingClasses.indexOf (className) >= 0;
-	});
-	$.extend ('toggleClass', function (className) {
-		if (this.hasClass (className)) {
-			this.removeClass (className);
-		} else {
-			this.addClass (className);
-		}
-	});
+	}
 	$.extend ('each', function (itemHandler) {
 		itemHandler.call (this, this);
 	});
-	$.extend ('empty', function () {
-		this.native.innerHTML = '';
-	});
+	if (document.replaceChildren) {
+		$.extend ('empty', function () {
+			this.native.replaceChildren ();
+			return this;
+		});
+	} else {
+		$.extend ('empty', function () {
+			this.native.innerHTML = '';
+			return this;
+		});
+	}
 	$.extend ('text', function (text) {
-		if ($.defined (text)) {
-			this.empty ();
-			this.native.appendChild (document.createTextNode (text));
+		if (arguments.length) {
+			this.native.textContent = text;
 			return this;
 		} else {
 			//return this.native.innerText;
@@ -363,9 +387,9 @@
 		return this.native.tagName.toLowerCase ();
 	});
 	$.extend ('children', function (index) {
-		if ($.defined (index)) {
+		if (arguments.length) {
 			if (typeof(index)=="string" && index.substr(0,1) == ".") {
-				return $(this.native.getElementsByClassName(index.substr(1)));
+				return $(this.native.getElementsByClassName (index.substr (1)));
 			} else
 			if (this.native.children[index]) {
 				return $(this.native.children[index]);

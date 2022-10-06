@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+<script type="text/javascript" src="../src/js/dollar.js"></script>
+<script type="text/javascript" src="test.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+"use strict";
+test ('$(html)', function () {
+	var el;
+	el = $('<span>');
+	assert (el.native.tagName.toLowerCase() == 'span',
+		'$(<span>) failed');
+	el = $('<span/>');
+	assert (el.native.tagName.toLowerCase() == 'span',
+		'$(<span/>) failed');
+	el = $('<span data-name="value">');
+	assert (el.native.getAttribute('data-name') == 'value',
+		'$(span with attribute) failed');
+	el = $('<div data-name="value"><span>1</span></div>');
+	assert (el.native.firstChild.tagName.toLowerCase() == 'span',
+		'$(div with child) failed');
+});
+test ('$.defined, $.undefined', function () {
+	assert (!$.defined (undefined),
+		'$.defined (undefined) returned true');
+	assert ($.defined (123),
+		'$.defined (123) returned false');
+	assert ($.undefined (undefined),
+		'$.undefined (undefined) returned false');
+	assert (!$.undefined (123),
+		'$.undefined (123) returned true');
+});
+test ('tag', function () {
+	var el;
+	el = $('<span>');
+	assert (el.tag() == 'span',
+		'$().tag() failed');
+});
+test ('val', function () {
+	var input = $('<input/>');
+	assert (input.val ("123") == input,
+		'$().val(value) is not chaining');
+	assert (input.native.value == '123',
+		'$().val(value) not working');
+	assert (input.val() == '123',
+		'$().val() not working');
+	assert (input.val(undefined) != '123',
+		'$().val(undefined) not working');
+});
+test ('text', function () {
+	var span = $('<span/>');
+	assert (span.text ("123") == span,
+		'$().text(text) is not chaining');
+	assert (span.native.textContent == '123',
+		'$().text(text) not working');
+	assert (span.text() == '123',
+		'$().text() not working');
+	assert (span.text(undefined) != '123',
+		'$().text(undefined) is not working');
+});
+test ('checked', function () {
+	var input = $('<input type="checkbox"/>');
+	input.checked (true);
+	assert (input.native.checked, '$().checked(true) not working');
+	assert (input.checked (undefined) == input, '$().checked(undefined) is not chaining');
+	assert (!input.native.checked, '$().checked(undefined) not working');
+	assert (!input.checked(), '$().checked() is not working (should be false)');
+	assert (input.checked (true) == input, '$().checked(true) is not chaining');
+	assert (input.checked(), '$().checked() is not working (should be true)');
+});
+test ('attr', function () {
+	var input = $('<input type="checkbox"/>');
+	assert (input.attr ('type') == 'checkbox', '$().attr(attr) not working');
+	assert (input.attr ('type', undefined) == input, '$().attr(attr,undefined) not working');
+	assert (input.attr ('type', null) == input, '$().attr(type,null) not chaining');
+	assert (!input.native.hasAttribute ('type'), '$().attr(attr,null) not working');
+	assert (input.attr ({ checked: true, type: 'checkbox' }) == input, '$().attr(object) not chaining');
+	assert (input.native.type == 'checkbox' && input.native.checked, '$().attr(object) not working');
+});
+test ('css', function () {
+	var span = $('<span style="display: none"/>');
+	assert (span.css ('display') == 'none', '$().css(attr) not working');
+	assert (span.css ('display', undefined) == span, '$().css(attr,undefined) not working');
+	assert (span.css ('display', 'none') == span, '$().css(attr,value) not chaining');
+	assert (span.native.style.display == 'none', '$().css(attr,value) not working');
+	assert (span.css ({ display: 'inline-block', visibility: 'hidden' }) == span, '$().css(object) is not chaining');
+	assert (span.native.style.display == 'inline-block' && span.native.style.visibility == 'hidden', '$().css(object) not working');
+});
+test ('show, hide, toggle', function () {
+	var span = $('<span/>');
+	assert (span.hide () == span, '$().hide() is not chaining');
+	assert (span.native.style.display == 'none', '$().hide() not working');
+	assert (span.show () == span, '$().show() is not chaining');
+	assert (span.native.style.display != 'none', '$().show() not working');
+	assert (span.toggle () == span, '$().toggle() is not chaining [1]');
+	assert (span.native.style.display == 'none', '$().toggle() not working [1]');
+	assert (span.toggle () == span, '$().toggle() is not chaining [2]');
+	assert (span.native.style.display != 'none', '$().toggle() not working [2]');
+});
+// qué falta y queda para otro día:
+// children, each, append, parent, remove, prepend, prev, next, empty
+// addClass, removeClass, toggleClass, hasClass
+// focus
+// cell
+// clone
+// $.array
+// $.debounce
+// $.spread
+</script>
+</body>
+</html>
